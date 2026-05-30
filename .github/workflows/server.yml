@@ -13,18 +13,37 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21' # Upgraded to Java 21 for Minecraft 1.21.11!
 
-      - name: Install Minecraft and Playit
+      - name: Install Minecraft and All Plugins
         run: |
-          # Download Server Jar (Paper MC for performance)
-          wget -O server.jar https://api.papermc.io/v2/projects/paper/versions/1.20.4/builds/496/downloads/paper-1.20.4-496.jar
+          # Download Server Jar (Paper MC 1.21.11)
+          wget -O server.jar https://api.papermc.io/v2/projects/paper/versions/1.21.11/builds/38/downloads/paper-1.21.11-38.jar
           
           # Accept EULA and configure settings
           echo "eula=true" > eula.txt
           echo "online-mode=false" > server.properties
           echo "max-players=8" >> server.properties
           
+          # Create plugins folder
+          mkdir -p plugins
+          
+          # 1. Download ViaVersion (Allows newer Minecraft versions to join)
+          wget -O plugins/ViaVersion.jar https://github.com/ViaVersion/ViaVersion/releases/latest/download/ViaVersion.jar
+          
+          # 2. Download ViaBackwards (Allows older Minecraft versions to join)
+          wget -O plugins/ViaBackwards.jar https://github.com/ViaVersion/ViaBackwards/releases/latest/download/ViaBackwards.jar
+          
+          # 3. Download Geyser Spigot (Allows Bedrock/Mobile players to join)
+          wget -O plugins/Geyser-Spigot.jar https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot
+          
+          # 4. Download Floodgate (Lets Bedrock bypass Java account premium checks)
+          wget -O plugins/Floodgate-Spigot.jar https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot
+
+          # Pre-configure Geyser to use Floodgate authentication automatically
+          mkdir -p plugins/Geyser-Spigot
+          echo "auth-type: floodgate" > plugins/Geyser-Spigot/config.yml
+
           # Install Playit.gg Agent
           curl -SsL https://playit-cloud.github.io/ppa/key.gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/playit.gpg
           echo "deb [signed-by=/etc/apt/trusted.gpg.d/playit.gpg] https://playit-cloud.github.io/ppa/data ./" | sudo tee /etc/apt/sources.list.d/playit.list
