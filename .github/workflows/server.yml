@@ -47,14 +47,16 @@ jobs:
           mkdir -p plugins/Geyser-Spigot
           echo "auth-type: floodgate" > plugins/Geyser-Spigot/config.yml
 
-          # Download a clean, portable version of Playit that bypasses the broken service
-          curl -Ao playit https://github.com/playit-cloud/playit-agent/releases/latest/download/playit-linux-amd64
-          chmod +x playit
+          # Download and install playit properly
+          curl -SsL https://playit-cloud.github.io/ppa/key.gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/playit.gpg
+          echo "deb [signed-by=/etc/apt/trusted.gpg.d/playit.gpg] https://playit-cloud.github.io/ppa/data ./" | sudo tee /etc/apt/sources.list.d/playit.list
+          sudo apt-get update
+          sudo apt-get install playit -y
 
       - name: Start Server and Playit Tunnel
         run: |
-          # Launch the portable playit program and wait for the link
-          ./playit &
+          # Run playit manually using its full path to bypass service blocks
+          /usr/bin/playit-agent --secret-path playit-secret.json &
           sleep 10
           
           # Start the Minecraft Server
