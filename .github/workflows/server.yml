@@ -28,17 +28,20 @@ jobs:
           # Create plugins folder
           mkdir -p plugins
           
-          # 1. Download ViaVersion (Using direct raw link)
-          wget -O plugins/ViaVersion.jar https://pub-c2901dbd31bc40289f81dcf35198df49.r2.dev/ViaVersion.jar
+          # 1. Download ViaVersion (Official 1.21.11 Compatible Version)
+          wget -O plugins/ViaVersion.jar https://hangar.papermc.io/api/v1/projects/ViaVersion/ViaVersion/versions/5.9.1/PAPER/download
           
-          # 2. Download ViaBackwards (Using direct raw link)
-          wget -O plugins/ViaBackwards.jar https://pub-c2901dbd31bc40289f81dcf35198df49.r2.dev/ViaBackwards.jar
+          # 2. Download ViaBackwards (Official 1.21.11 Compatible Version)
+          wget -O plugins/ViaBackwards.jar https://hangar.papermc.io/api/v1/projects/ViaVersion/ViaBackwards/versions/5.9.1/PAPER/download
           
-          # 3. Download Geyser Spigot 
+          # 3. Download Geyser Spigot (Latest 1.21.11 Crossplay)
           wget -O plugins/Geyser-Spigot.jar https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot
           
-          # 4. Download Floodgate 
+          # 4. Download Floodgate (Bypasses Bedrock premium account checks)
           wget -O plugins/Floodgate-Spigot.jar https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot
+
+          # 5. Download Chunky (Pre-generates world to prevent lag)
+          wget -O plugins/Chunky.jar https://hangar.papermc.io/api/v1/projects/pop4959/Chunky/versions/1.4.28/PAPER/download
 
           # Pre-configure Geyser to use Floodgate authentication automatically
           mkdir -p plugins/Geyser-Spigot
