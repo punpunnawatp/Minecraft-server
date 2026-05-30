@@ -28,11 +28,11 @@ jobs:
           # Create plugins folder
           mkdir -p plugins
           
-          # 1. Download ViaVersion (Fixed download url)
-          wget -O plugins/ViaVersion.jar https://api.papermc.io/v2/projects/viaversion/versions/latest/downloads/viaversion
+          # 1. Download ViaVersion (Using direct raw link)
+          wget -O plugins/ViaVersion.jar https://pub-c2901dbd31bc40289f81dcf35198df49.r2.dev/ViaVersion.jar
           
-          # 2. Download ViaBackwards (Fixed download url)
-          wget -O plugins/ViaBackwards.jar https://api.papermc.io/v2/projects/viabackwards/versions/latest/downloads/viabackwards
+          # 2. Download ViaBackwards (Using direct raw link)
+          wget -O plugins/ViaBackwards.jar https://pub-c2901dbd31bc40289f81dcf35198df49.r2.dev/ViaBackwards.jar
           
           # 3. Download Geyser Spigot 
           wget -O plugins/Geyser-Spigot.jar https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot
