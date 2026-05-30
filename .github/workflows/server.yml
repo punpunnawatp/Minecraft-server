@@ -55,8 +55,8 @@ jobs:
 
       - name: Start Server and Playit Tunnel
         run: |
-          # Run playit manually using its full path to bypass service blocks
-          /usr/bin/playit-agent --secret-path playit-secret.json &
+          # Use the generic playit command but give it a custom secret path to bypass background services
+          playit --secret-path playit-secret.json &
           sleep 10
           
           # Start the Minecraft Server
