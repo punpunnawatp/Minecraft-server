@@ -28,38 +28,33 @@ jobs:
           # Create plugins folder
           mkdir -p plugins
           
-          # 1. Download ViaVersion (Official 1.21.11 Compatible Version)
+          # 1. Download ViaVersion 
           wget -O plugins/ViaVersion.jar https://hangar.papermc.io/api/v1/projects/ViaVersion/ViaVersion/versions/5.9.1/PAPER/download
           
-          # 2. Download ViaBackwards (Official 1.21.11 Compatible Version)
+          # 2. Download ViaBackwards 
           wget -O plugins/ViaBackwards.jar https://hangar.papermc.io/api/v1/projects/ViaVersion/ViaBackwards/versions/5.9.1/PAPER/download
           
-          # 3. Download Geyser Spigot (Latest 1.21.11 Crossplay)
+          # 3. Download Geyser Spigot (Latest Crossplay)
           wget -O plugins/Geyser-Spigot.jar https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot
           
-          # 4. Download Floodgate (Bypasses Bedrock premium account checks)
+          # 4. Download Floodgate
           wget -O plugins/Floodgate-Spigot.jar https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot
 
-          # 5. Download Chunky (Pre-generates world to prevent lag)
+          # 5. Download Chunky
           wget -O plugins/Chunky.jar https://hangar.papermc.io/api/v1/projects/pop4959/Chunky/versions/1.4.28/PAPER/download
 
           # Pre-configure Geyser to use Floodgate authentication automatically
           mkdir -p plugins/Geyser-Spigot
           echo "auth-type: floodgate" > plugins/Geyser-Spigot/config.yml
 
-          # Install Playit.gg Agent
-          curl -SsL https://playit-cloud.github.io/ppa/key.gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/playit.gpg
-          echo "deb [signed-by=/etc/apt/trusted.gpg.d/playit.gpg] https://playit-cloud.github.io/ppa/data ./" | sudo tee /etc/apt/sources.list.d/playit.list
-          sudo apt-get update
-          sudo apt-get install playit -y
+          # Download a clean, portable version of Playit that bypasses the broken service
+          curl -Ao playit https://github.com/playit-cloud/playit-agent/releases/latest/download/playit-linux-amd64
+          chmod +x playit
 
       - name: Start Server and Playit Tunnel
         run: |
-          # Stop the locked system service so we can run it manually
-          sudo systemctl stop playit || true
-          
-          # Start a plain playit agent in the background and wait for the link
-          playit start &
+          # Launch the portable playit program and wait for the link
+          ./playit &
           sleep 10
           
           # Start the Minecraft Server
