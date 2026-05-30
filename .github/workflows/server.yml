@@ -1,0 +1,40 @@
+name: Minecraft Cloud Server
+on:
+  workflow_dispatch:
+
+jobs:
+  run-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install Minecraft and Playit
+        run: |
+          # Download Server Jar (Paper MC for performance)
+          wget -O server.jar https://api.papermc.io/v2/projects/paper/versions/1.20.4/builds/496/downloads/paper-1.20.4-496.jar
+          
+          # Accept EULA and configure settings
+          echo "eula=true" > eula.txt
+          echo "online-mode=false" > server.properties
+          echo "max-players=8" >> server.properties
+          
+          # Install Playit.gg Agent
+          curl -SsL https://playit-cloud.github.io/ppa/key.gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/playit.gpg
+          echo "deb [signed-by=/etc/apt/trusted.gpg.d/playit.gpg] https://playit-cloud.github.io/ppa/data ./" | sudo tee /etc/apt/sources.list.d/playit.list
+          sudo apt-get update
+          sudo apt-get install playit -y
+
+      - name: Start Server and Playit Tunnel
+        run: |
+          # Run playit in the background so it shows the claim link in the logs
+          playit &
+          
+          # Start the Minecraft Server
+          java -Xmx6G -Xms6G -jar server.jar nogui
