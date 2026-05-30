@@ -47,16 +47,14 @@ jobs:
           mkdir -p plugins/Geyser-Spigot
           echo "auth-type: floodgate" > plugins/Geyser-Spigot/config.yml
 
-          # Download and install playit properly
-          curl -SsL https://playit-cloud.github.io/ppa/key.gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/playit.gpg
-          echo "deb [signed-by=/etc/apt/trusted.gpg.d/playit.gpg] https://playit-cloud.github.io/ppa/data ./" | sudo tee /etc/apt/sources.list.d/playit.list
-          sudo apt-get update
-          sudo apt-get install playit -y
+          # Download clean, portable Playit agent binary (No systemctl/service bugs!)
+          wget -O playit https://github.com/playit-cloud/playit-agent/releases/download/v0.15.26/playit-linux-amd64
+          chmod +x playit
 
       - name: Start Server and Playit Tunnel
         run: |
-          # Use the generic playit command but give it a custom secret path to bypass background services
-          playit --secret-path playit-secret.json &
+          # Start portable playit manually and give it 10 seconds to generate the claim link
+          ./playit &
           sleep 10
           
           # Start the Minecraft Server
